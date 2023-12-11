@@ -22,9 +22,8 @@ int script(char **argv, char **env)
 	pid_t pid;
 	char *cmd = NULL, **args = NULL;
 
-	args = (char **)malloc(1024 * sizeof(char));
 
-	while (getcmd(cmd, args) == 0)
+	while (getcmd(&cmd, &args) == 0)
 	{
 		pid = fork();
 		if (pid == -1)
@@ -36,18 +35,16 @@ int script(char **argv, char **env)
 		}
 		if (pid == 0)
 		{
-			if (execve(*args, args, env) < 0)
-			{
-				perror(argv[0]);
-				free(cmd);
-				free(args);
-				return (-1);
-			}
+			execve(*args, args, env);
+			perror(argv[0]);
+			free(cmd);
+			free(args);
+			exit(EXIT_FAILURE);
 		} else
 			wait(&status);
+		free(cmd);
+		free(args);
 	}
-	free(cmd);
-	free(args);
 	return (0);
 }
 
@@ -63,12 +60,11 @@ int interactive(char **argv, char **env)
 	pid_t pid;
 	char *cmd = NULL, **args = NULL;
 
-	args = (char **)malloc(1024 * sizeof(char));
 
 	do {
 		_puts("$ ");
-		if (getcmd(cmd, args) < 0)
-			return (-1);
+		if (getcmd(&cmd, &args) < 0)
+			return (0);
 		pid = fork();
 		if (pid == -1)
 		{
@@ -79,18 +75,16 @@ int interactive(char **argv, char **env)
 		}
 		if (pid == 0)
 		{
-			if (execve(*args, args, env) < 0)
-			{
-				perror(argv[0]);
-				free(cmd);
-				free(args);
-				return (-1);
-			}
+			execve(*args, args, env);
+			perror(argv[0]);
+			free(cmd);
+			free(args);
+			exit(EXIT_FAILURE);
 		} else
 			wait(&status);
+		free(cmd);
+		free(args);
 	} while (1);
-	free(cmd);
-	free(args);
 	return (0);
 }
 

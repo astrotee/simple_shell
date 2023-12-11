@@ -75,15 +75,19 @@ int tokenize(char *str, char **lst)
 * Return: status code
 */
 
-int getcmd(char *cmd, char **args)
+int getcmd(char **cmd, char ***args)
 {
 	size_t len = 0;
 	ssize_t nread;
 
-	nread = getline(&cmd, &len, stdin);
+	nread = getline(cmd, &len, stdin);
 	if (nread == -1)
+	{
+		free(*cmd);
 		return (-1);
-	cmd[len - 1] = '\0';
-	tokenize(cmd, args);
+	}
+	(*cmd)[nread - 1] = '\0';
+	*args = (char **)malloc(nread * sizeof(char));
+	tokenize(*cmd, *args);
 	return (0);
 }
