@@ -11,58 +11,21 @@
 
 
 /**
-* script - execute a script
+* start - Start interactive shell
 * @argv: the args values
 * @env: environment variables
 * Return: status code
 */
-int script(char **argv, char **env)
+int start(char **argv, char **env)
 {
 	int status;
 	pid_t pid;
 	char *cmd = NULL, **args = NULL;
-
-
-	while (getcmd(&cmd, &args) == 0)
-	{
-		pid = fork();
-		if (pid == -1)
-		{
-			perror(argv[0]);
-			free(cmd);
-			free(args);
-			return (-1);
-		}
-		if (pid == 0)
-		{
-			execve(*args, args, env);
-			perror(argv[0]);
-			free(cmd);
-			free(args);
-			exit(EXIT_FAILURE);
-		} else
-			wait(&status);
-		free(cmd);
-		free(args);
-	}
-	return (0);
-}
-
-/**
-* interactive - Start interactive shell
-* @argv: the args values
-* @env: environment variables
-* Return: status code
-*/
-int interactive(char **argv, char **env)
-{
-	int status;
-	pid_t pid;
-	char *cmd = NULL, **args = NULL;
-
+	short interactive = isatty(STDIN_FILENO);
 
 	do {
-		_puts("$ ");
+		if (interactive)
+			_puts("$ ");
 		if (getcmd(&cmd, &args) < 0)
 			return (0);
 		pid = fork();
@@ -100,9 +63,6 @@ int main(int argc, char **argv, char **env)
 
 	if (argc > 1)
 		execve(*argv, argv, env);
-	if (isatty(STDIN_FILENO))
-		interactive(argv, env);
-	else
-		script(argv, env);
+	start(argv, env);
 	return (0);
 }
