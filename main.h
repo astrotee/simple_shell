@@ -16,6 +16,7 @@ int tokenize(char *str, char **lst, char *delim);
 short isabs(char *path);
 
 char *_getenv(const char *name);
+void printenv(void);
 char *_getexec(const char *file);
 
 int getcmd(char **cmd, char ***args);

@@ -66,3 +66,17 @@ char *_getexec(const char *file)
 	return (NULL);
 }
 
+/**
+* printenv - print environment variables
+* Return: void
+*/
+void printenv(void)
+{
+	int i = 0;
+
+	while (environ[i])
+	{
+		_puts(environ[i++]);
+		_puts("\n");
+	}
+}

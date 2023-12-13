@@ -11,12 +11,28 @@
 
 
 /**
+* builtin - run builtin command if it is
+* @args: command args
+* Return: status code
+*/
+int builtin(char **args)
+{
+	if (_strcmp(args[0], "exit") == 0)
+		exit(EXIT_SUCCESS);
+	if (_strcmp(args[0], "env") == 0)
+	{
+		printenv();
+		return (1);
+	}
+	return (0);
+}
+
+/**
 * getcmd - get input command line
 * @cmd: pointer to line read
 * @args: the parsed args
 * Return: status code
 */
-
 int getcmd(char **cmd, char ***args)
 {
 	size_t len = 0;
@@ -74,6 +90,12 @@ int start(char **argv)
 		if (getcmd(&cmd, &args) < 0)
 			exit(EXIT_SUCCESS);
 		if (args[0] == NULL)
+		{
+			free(cmd);
+			free(args);
+			continue;
+		}
+		if (builtin(args))
 		{
 			free(cmd);
 			free(args);
