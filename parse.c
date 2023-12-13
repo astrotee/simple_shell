@@ -5,7 +5,11 @@
 #include "main.h"
 
 
-
+/**
+* isabs - check if path is absolute
+* @path: the path string
+* Return: 1 if True
+*/
 short isabs(char *path)
 {
 	size_t len = _strlen(path);
