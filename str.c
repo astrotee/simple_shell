@@ -7,11 +7,56 @@
 
 
 /**
+* _strcmp - find the index of a char
+* @str1: 1st string
+* @str2: 2nd string
+* Return: 0 if equal
+*/
+int _strcmp(const char *str1, const char *str2)
+{
+	int i = 0;
+
+	while (str1[i])
+	{
+		if (str1[i] > str2[i])
+			return (1);
+		else if (str1[i] < str2[i])
+			return (-1);
+		if (str1[i] != 0 || str2[i] != 0)
+			return (0);
+		i++;
+	}
+	return (str1[i] - str2[i]);
+}
+
+
+/**
+* findchar - find the index of a char
+* @str: the string to search
+* @c: the character to look for
+* Return: the index or -1 if not found
+*/
+int findchar(const char *str, char c)
+{
+	int i = 0;
+
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (i);
+		i++;
+	}
+
+	return (-1);
+}
+
+
+/**
 * _strlen - count the chars in a string
 * @str: the string
 * Return: the length of the string
 */
-size_t _strlen(char *str)
+size_t _strlen(const char *str)
 {
 	size_t i = 0;
 
@@ -26,7 +71,7 @@ size_t _strlen(char *str)
 * @str: the string
 * Return: the status code
 */
-int _puts(char *str)
+int _puts(const char *str)
 {
 	int i;
 
@@ -40,54 +85,3 @@ int _puts(char *str)
 	return (0);
 }
 
-/**
-* tokenize - split string by spaces
-* @str: the string
-* @lst: the split string
-* Return: the status code
-*/
-int tokenize(char *str, char **lst)
-{
-	char *token, *str1;
-	size_t lastchar, i = 0;
-
-	for (i = 0, str1 = str; ; i++, str1 = NULL)
-	{
-		token = strtok(str1, " ");
-		lst[i] = token;
-		if (token == NULL)
-			break;
-		lastchar = _strlen(token) - 1;
-		if (token[lastchar] == '\n')
-		{
-			token[lastchar] = '\0';
-			lst[i + 1] = NULL;
-			break;
-		}
-	}
-	return (0);
-}
-
-/**
-* getcmd - get input command line
-* @cmd: pointer to line read
-* @args: the parsed args
-* Return: status code
-*/
-
-int getcmd(char **cmd, char ***args)
-{
-	size_t len = 0;
-	ssize_t nread;
-
-	nread = getline(cmd, &len, stdin);
-	if (nread == -1)
-	{
-		free(*cmd);
-		return (-1);
-	}
-	(*cmd)[nread - 1] = '\0';
-	*args = (char **)malloc(nread * sizeof(char));
-	tokenize(*cmd, *args);
-	return (0);
-}

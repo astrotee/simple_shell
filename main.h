@@ -3,12 +3,23 @@
 #include <stddef.h>
 
 
+extern char **environ;
 
 
-size_t _strlen(char *str);
-int _puts(char *str);
-int tokenize(char *str, char **lst);
+size_t _strlen(const char *str);
+int _puts(const char *str);
+int findchar(const char *str, char c);
+int _strcmp(const char *str1, const char *str2);
+
+
+int tokenize(char *str, char **lst, char *delim);
+short isabs(char *path);
+
+char *_getenv(const char *name);
+char *_getexec(const char *file);
+
 int getcmd(char **cmd, char ***args);
-int start(char **argv, char **env);
+int forkexec(char *path, char **args);
+int start(char **argv);
 
 #endif
