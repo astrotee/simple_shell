@@ -13,12 +13,13 @@
 /**
 * builtin - run builtin command if it is
 * @args: command args
+* @status: the last exit code
 * Return: status code
 */
-int builtin(char **args)
+int builtin(char **args, int status)
 {
 	if (_strcmp(args[0], "exit") == 0)
-		exit(EXIT_SUCCESS);
+		exit(status);
 	if (_strcmp(args[0], "env") == 0)
 	{
 		printenv();
@@ -70,7 +71,9 @@ int forkexec(char *path, char **args)
 		return (1);
 	}
 	wait(&status);
-	return (0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return (status);
 }
 
 /**
@@ -80,7 +83,7 @@ int forkexec(char *path, char **args)
 */
 int start(char **argv)
 {
-	int status;
+	int status = 0, line = 1;
 	char *cmd = NULL, **args = NULL, *path;
 	short interactive = isatty(STDIN_FILENO);
 
@@ -90,36 +93,28 @@ int start(char **argv)
 		if (getcmd(&cmd, &args) < 0)
 			exit(EXIT_SUCCESS);
 		if (args[0] == NULL)
-		{
-			free(cmd);
-			free(args);
-			continue;
-		}
-		if (builtin(args))
-		{
-			free(cmd);
-			free(args);
-			continue;
-		}
-		path = isabs(args[0]) ? args[0] : _getexec(args[0]);
+			goto end;
+		if (builtin(args, status))
+			goto end;
+		path = _getexec(args[0]);
 		if (path == NULL)
 		{
-			perror(argv[0]);
-			free(cmd);
-			free(args);
-			continue;
+			status = 127;
+			fprintf(stderr, "%s: line %d: %s: ", argv[0], line, args[0]);
+			perror("");
+			goto end;
 		}
 		status = forkexec(path, args);
 		if (isabs(args[0]) == 0)
 			free(path);
+end:
 		free(cmd);
 		free(args);
-		if (status)
-			perror(argv[0]);
-		if (status == 1)
-			exit(EXIT_FAILURE);
+		if (status && interactive == 0)
+			exit(status);
+		line++;
 	} while (1);
-	return (0);
+	return (status);
 }
 
 /**

@@ -16,6 +16,7 @@
 int _strcmp(const char *str1, const char *str2)
 {
 	int i = 0, j, len1, len2;
+
 	len1 = _strlen(str1);
 	len2 = _strlen(str2);
 	j = (len1 < len2) ? len1 : len2;
