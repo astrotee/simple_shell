@@ -12,24 +12,35 @@
 
 /**
 * builtin - run builtin command if it is
+* @cmd: cmd name
 * @args: command args
 * @status: the last exit code
 * Return: status code
 */
 int builtin(char *cmd, char **args, int status)
 {
+	int e;
+
 	if (_strcmp(args[0], "exit") == 0)
 	{
+		if (args[1])
+		{
+			e = atoi(args[1]);
+			if (e == 0)
+				return (2);
+		}
+		else
+			e = status;
 		free(cmd);
 		free(args);
-		exit(status);
+		exit(e);
 	}
 	if (_strcmp(args[0], "env") == 0)
 	{
 		printenv();
 		return (1);
 	}
-	return (0);
+	return (-1);
 }
 
 /**
@@ -98,7 +109,11 @@ int start(char **argv)
 			exit(EXIT_SUCCESS);
 		if (args[0] == NULL)
 			goto end;
-		if (builtin(cmd, args, status))
+		status = builtin(cmd, args, status);
+		if (status == 2)
+			fprintf(stderr, "%s: line %d: %s: %s: numeric argument required\n",
+			argv[0], line, args[0], args[1]);
+		if (status != -1)
 			goto end;
 		path = _getexec(args[0]);
 		if (path == NULL)
