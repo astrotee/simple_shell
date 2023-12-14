@@ -51,8 +51,8 @@ char *_getexec(char *file)
 	if (path == NULL)
 		return (NULL);
 	path = strdup(path);
-	paths = (char **) malloc(_strlen(path) * sizeof(char));
-	tmp = (char *) malloc(_strlen(path) * sizeof(char));
+	paths = (char **) malloc((_strlen(path) + 1) * sizeof(char *));
+	tmp = (char *) malloc((_strlen(path) + 1) * sizeof(char));
 	tokenize(path, paths, ":");
 	for (i = 0; paths[i]; i++)
 	{
