@@ -38,7 +38,7 @@ int builtin(char *cmd, char **args, int status)
 	if (_strcmp(args[0], "env") == 0)
 	{
 		printenv();
-		return (1);
+		return (0);
 	}
 	return (-1);
 }
