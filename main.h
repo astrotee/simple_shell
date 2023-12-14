@@ -21,7 +21,7 @@ char *_getexec(char *file);
 
 int getcmd(char **cmd, char ***args);
 int forkexec(char *path, char **args);
-int builtin(char **args, int status);
+int builtin(char *cmd, char **args, int status);
 int start(char **argv);
 
 #endif

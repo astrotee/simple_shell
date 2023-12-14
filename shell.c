@@ -16,10 +16,14 @@
 * @status: the last exit code
 * Return: status code
 */
-int builtin(char **args, int status)
+int builtin(char *cmd, char **args, int status)
 {
 	if (_strcmp(args[0], "exit") == 0)
+	{
+		free(cmd);
+		free(args);
 		exit(status);
+	}
 	if (_strcmp(args[0], "env") == 0)
 	{
 		printenv();
@@ -94,7 +98,7 @@ int start(char **argv)
 			exit(EXIT_SUCCESS);
 		if (args[0] == NULL)
 			goto end;
-		if (builtin(args, status))
+		if (builtin(cmd, args, status))
 			goto end;
 		path = _getexec(args[0]);
 		if (path == NULL)
