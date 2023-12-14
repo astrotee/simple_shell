@@ -45,4 +45,30 @@ int tokenize(char *str, char **lst, char *delim)
 	}
 	return (0);
 }
+/**
+* _perr - print error string
+* @i: ineractive
+* @cmd: command name
+* @args: arguments
+* @line: line number
+* @errc: error code
+* Return: void
+*/
+void _perr(short i, const char *cmd, char **args, int line, int errc)
+{
+
+	fprintf(stderr, "%s: ", cmd);
+	if (i == 0)
+		fprintf(stderr, "line %d: ", line);
+	switch (errc)
+	{
+		case 2:
+			fprintf(stderr, "%s: %s: numeric argument required\n",
+					args[0], args[1]);
+		break;
+		case 127:
+			fprintf(stderr, "%s: ", args[0]);
+			perror("");
+	}
+}
 

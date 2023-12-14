@@ -111,16 +111,14 @@ int start(char **argv)
 			goto end;
 		status = builtin(cmd, args, status);
 		if (status == 2)
-			fprintf(stderr, "%s: line %d: %s: %s: numeric argument required\n",
-			argv[0], line, args[0], args[1]);
+			_perr(interactive, argv[0], args, line, 2);
 		if (status != -1)
 			goto end;
 		path = _getexec(args[0]);
 		if (path == NULL)
 		{
 			status = 127;
-			fprintf(stderr, "%s: line %d: %s: ", argv[0], line, args[0]);
-			perror("");
+			_perr(interactive, argv[0], args, line, 127);
 			goto end;
 		}
 		status = forkexec(path, args);

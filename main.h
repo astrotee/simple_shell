@@ -14,6 +14,7 @@ int _strcmp(const char *str1, const char *str2);
 
 int tokenize(char *str, char **lst, char *delim);
 short isabs(char *path);
+void _perr(short i, const char* cmd, char **args, int line, int errc);
 
 char *_getenv(const char *name);
 void printenv(void);
