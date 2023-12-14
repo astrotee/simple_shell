@@ -17,7 +17,7 @@ short isabs(char *path);
 
 char *_getenv(const char *name);
 void printenv(void);
-char *_getexec(const char *file);
+char *_getexec(char *file);
 
 int getcmd(char **cmd, char ***args);
 int forkexec(char *path, char **args);

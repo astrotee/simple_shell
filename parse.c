@@ -12,11 +12,9 @@
 */
 short isabs(char *path)
 {
-	size_t len = _strlen(path);
-
-	if (path[0] == '/' || (len > 1 && path[0] == '.' && path[1] == '/'))
-		return (1);
-	return (0);
+	if (findchar(path, '/') == -1)
+		return (0);
+	return (1);
 }
 
 /**

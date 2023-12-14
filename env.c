@@ -33,12 +33,19 @@ char *_getenv(const char *name)
 * @file: the name of the file
 * Return: the value if found or NULL
 */
-char *_getexec(const char *file)
+char *_getexec(char *file)
 {
 	char *path, **paths;
 	char *tmp = NULL;
 	int i;
 	struct stat st;
+
+	if (isabs(file))
+	{
+		if (stat(file, &st) == 0)
+			return (file);
+		return (NULL);
+	}
 
 	path = _getenv("PATH");
 	if (path == NULL)

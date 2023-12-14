@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "main.h"
 
 
 /**
@@ -14,14 +15,19 @@
 */
 int _strcmp(const char *str1, const char *str2)
 {
-	int i = 0;
+	int i = 0, j, len1, len2;
+	len1 = _strlen(str1);
+	len2 = _strlen(str2);
+	j = (len1 < len2) ? len1 : len2;
 
-	while (str1[i] && str2[i])
+	while (i < j)
 	{
 		if (str1[i] != str2[i])
 			return (str1[i] - str2[i]);
 		i++;
 	}
+	if (i > 0)
+		i--;
 	return (str1[i] - str2[i]);
 }
 
