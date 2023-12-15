@@ -78,7 +78,7 @@ int start(char **argv, char **env)
 			exit(EXIT_SUCCESS);
 		if (args[0] == NULL)
 			goto end;
-		status = builtin(argv[0], env, line, args, status);
+		status = builtin(argv[0], cmd, env, line, args, status);
 		if (status != -1)
 			goto end;
 		path = _getexec(args[0], env);

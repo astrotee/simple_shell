@@ -22,8 +22,8 @@ void printenv(char **env);
 char *_getexec(char *file, char **env);
 
 
-int bi_exit(char *cmd, int line, char **args, int status);
-int builtin(char *cmd, char **env, int line, char **args, int status);
+int bi_exit(char *cmd, char *cline, int line, char **args, int status);
+int builtin(char *cmd, char *cline, char **env, int line, char **args, int status);
 
 int getcmd(char **cmd, char ***args);
 int forkexec(char *path, char **args, char **env);

@@ -9,17 +9,19 @@
 /**
 * builtin - run builtin command if it is
 * @cmd: the shell command
+* @cline: the command line read
 * @env: the environment variables
 * @line: the current line number
 * @args: command args
 * @status: the last exit status
 * Return: status code
 */
-int builtin(char *cmd, char **env, int line, char **args, int status)
+int builtin(char *cmd, char *cline, char **env, int line,
+	    char **args, int status)
 {
 
 	if (_strcmp(args[0], "exit") == 0)
-		return (bi_exit(cmd, line, args, status));
+		return (bi_exit(cmd, cline, line, args, status));
 	if (_strcmp(args[0], "env") == 0)
 	{
 		printenv(env);
@@ -51,12 +53,13 @@ int builtin(char *cmd, char **env, int line, char **args, int status)
 /**
 * bi_exit - builtin exit command
 * @cmd: the shell command
+* @cline: the command line read
 * @line: the current line number
 * @args: command args
 * @status: the last exit status
 * Return: status code
 */
-int bi_exit(char *cmd, int line, char **args, int status)
+int bi_exit(char *cmd, char *cline, int line, char **args, int status)
 {
 	int e;
 
@@ -71,6 +74,7 @@ int bi_exit(char *cmd, int line, char **args, int status)
 	}
 	else
 		e = status;
+	free(cline);
 	free(args);
 	exit(e);
 
