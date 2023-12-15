@@ -22,7 +22,7 @@ void printenv(char **env);
 char *_getexec(char *file, char **env);
 
 
-void filter_comments(char *cline);
+void filter_comments(char **args);
 int bi_exit(char *cmd, char *cline, int line, char **args, int status);
 int builtin(char *cmd, char *cline, char **env, int line, char **args, int status);
 

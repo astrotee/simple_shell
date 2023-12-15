@@ -82,12 +82,21 @@ int bi_exit(char *cmd, char *cline, int line, char **args, int status)
 
 /**
 * filter_comments - filter out comments
-* @cline: the commnad line input
+* @args: the commnad line arguments
 * Return: void
 */
-void filter_comments(char *cline)
+void filter_comments(char **args)
 {
-	int i = findchar(cline, '#');
-	if (i != -1)
-		cline[i] = '\0';
+	int i = 0;
+
+	while (args[i])
+	{
+		if (args[i][0] == '#')
+		{
+			args[i] = NULL;
+			return;
+		}
+		i++;
+	}
 }
+
