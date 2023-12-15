@@ -28,6 +28,7 @@ int getcmd(char **cmd, char ***args)
 		return (-1);
 	}
 	(*cmd)[nread - 1] = '\0';
+	filter_comments(*cmd);
 	*args = (char **)malloc((nread + 1) * sizeof(char *));
 	tokenize(*cmd, *args, " ");
 	return (0);

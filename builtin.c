@@ -79,3 +79,15 @@ int bi_exit(char *cmd, char *cline, int line, char **args, int status)
 	exit(e);
 
 }
+
+/**
+* filter_comments - filter out comments
+* @cline: the commnad line input
+* Return: void
+*/
+void filter_comments(char *cline)
+{
+	int i = findchar(cline, '#');
+	if (i != -1)
+		cline[i] = '\0';
+}
