@@ -17,6 +17,7 @@ void _perr(char *cmd, int line, char *errmsg, ...);
 
 char *_getenv(const char *name, char **env);
 int _setenv(const char *name, const char *value, char **env);
+int _unsetenv(const char *name, char **env);
 void printenv(char **env);
 char *_getexec(char *file, char **env);
 

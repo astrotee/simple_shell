@@ -25,6 +25,26 @@ int builtin(char *cmd, char **env, int line, char **args, int status)
 		printenv(env);
 		return (0);
 	}
+	if (_strcmp(args[0], "setenv") == 0)
+	{
+		if (args[1] && args[2])
+		{
+			_setenv(args[1], args[2], env);
+			return (0);
+		}
+		_perr(cmd, line, "missing arguments!");
+		return (1);
+	}
+	if (_strcmp(args[0], "setenv") == 0)
+	{
+		if (args[1])
+		{
+			unsetenv(args[1]);
+			return (0);
+		}
+		_perr(cmd, line, "missing arguments!");
+		return (1);
+	}
 	return (-1);
 }
 
