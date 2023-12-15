@@ -11,39 +11,6 @@
 
 
 /**
-* builtin - run builtin command if it is
-* @cmd: cmd name
-* @args: command args
-* @status: the last exit code
-* Return: status code
-*/
-int builtin(char *cmd, char **args, int status)
-{
-	int e;
-
-	if (_strcmp(args[0], "exit") == 0)
-	{
-		if (args[1])
-		{
-			e = atoi(args[1]);
-			if (e == 0)
-				return (2);
-		}
-		else
-			e = status;
-		free(cmd);
-		free(args);
-		exit(e);
-	}
-	if (_strcmp(args[0], "env") == 0)
-	{
-		printenv();
-		return (0);
-	}
-	return (-1);
-}
-
-/**
 * getcmd - get input command line
 * @cmd: pointer to line read
 * @args: the parsed args
@@ -70,9 +37,10 @@ int getcmd(char **cmd, char ***args)
 * forkexec - fork and execute command
 * @path: path to executable
 * @args: arguments array
+* @env: the environment variables
 * Return: status code
 */
-int forkexec(char *path, char **args)
+int forkexec(char *path, char **args, char **env)
 {
 	int status;
 	pid_t pid;
@@ -82,7 +50,7 @@ int forkexec(char *path, char **args)
 		return (-1);
 	if (pid == 0)
 	{
-		execve(path, args, environ);
+		execve(path, args, env);
 		return (1);
 	}
 	wait(&status);
@@ -94,9 +62,10 @@ int forkexec(char *path, char **args)
 /**
 * start - Start interactive shell
 * @argv: the args values
+* @env: the environment variables
 * Return: status code
 */
-int start(char **argv)
+int start(char **argv, char **env)
 {
 	int status = 0, line = 1;
 	char *cmd = NULL, **args = NULL, *path;
@@ -109,19 +78,17 @@ int start(char **argv)
 			exit(EXIT_SUCCESS);
 		if (args[0] == NULL)
 			goto end;
-		status = builtin(cmd, args, status);
-		if (status == 2)
-			_perr(interactive, argv[0], args, line, 2);
+		status = builtin(argv[0], env, line, args, status);
 		if (status != -1)
 			goto end;
-		path = _getexec(args[0]);
+		path = _getexec(args[0], env);
 		if (path == NULL)
 		{
 			status = 127;
-			_perr(interactive, argv[0], args, line, 127);
+			_perr(argv[0], line, "%s: not found", args[0]);
 			goto end;
 		}
-		status = forkexec(path, args);
+		status = forkexec(path, args, env);
 		if (isabs(args[0]) == 0)
 			free(path);
 end:
@@ -143,9 +110,8 @@ end:
 */
 int main(int argc, char **argv, char **env)
 {
-
 	if (argc > 1)
 		execve(*argv, argv, env);
-	start(argv);
+	start(argv, env);
 	return (0);
 }

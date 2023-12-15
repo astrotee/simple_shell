@@ -1,7 +1,9 @@
 /* vim: set noet ts=8 sw=8: */
 #include <stddef.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include <string.h>
+#include <unistd.h>
 #include "main.h"
 
 
@@ -47,28 +49,23 @@ int tokenize(char *str, char **lst, char *delim)
 }
 /**
 * _perr - print error string
-* @i: ineractive
-* @cmd: command name
-* @args: arguments
+* @cmd: the shell command
 * @line: line number
-* @errc: error code
+* @errmsg: the error message
 * Return: void
 */
-void _perr(short i, const char *cmd, char **args, int line, int errc)
+void _perr(char *cmd, int line, char *errmsg, ...)
 {
+	va_list args;
+
+	va_start(args, errmsg);
 
 	fprintf(stderr, "%s: ", cmd);
-	if (i == 0)
-		fprintf(stderr, "line %d: ", line);
-	switch (errc)
-	{
-		case 2:
-			fprintf(stderr, "%s: %s: numeric argument required\n",
-					args[0], args[1]);
-		break;
-		case 127:
-			fprintf(stderr, "%s: ", args[0]);
-			perror("");
-	}
+	if (isatty(STDIN_FILENO) == 0)
+		fprintf(stderr, "%d: ", line);
+	vfprintf(stderr, errmsg, args);
+	fprintf(stderr, "\n");
+	va_end(args);
+
 }
 
