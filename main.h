@@ -24,7 +24,8 @@ char *_getexec(char *file, char **env);
 
 void filter_comments(char **args);
 int bi_exit(char *cmd, char *cline, int line, char **args, int status);
-int builtin(char *cmd, char *cline, char **env, int line, char **args, int status);
+int builtin(char *cmd, char *cline, char **env, int line,
+		char **args, int status);
 
 int getcmd(char **cmd, char ***args);
 int forkexec(char *path, char **args, char **env);
